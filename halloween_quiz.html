@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Halloween Quiz 🎃</title>
+    <title>Zenith English - Halloween Quiz</title>
     <style>
         * {
             margin: 0;
@@ -13,7 +13,7 @@
 
         body {
             font-family: 'Arial Black', Arial, sans-serif;
-            background: linear-gradient(135deg, #1a1a1a 0%, #2d1b00 100%);
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a0a00 50%, #2d1400 100%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -21,11 +21,105 @@
             overflow: hidden;
         }
 
-        .container {
+        .screen {
+            display: none;
+            width: 100%;
+            height: 100vh;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .screen.active {
+            display: flex;
+        }
+
+        .decoration {
+            position: fixed;
+            font-size: 3em;
+            opacity: 0.2;
+            animation: float 4s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        .pumpkin1 { top: 8%; left: 8%; animation-delay: 0s; }
+        .pumpkin2 { top: 12%; right: 10%; animation-delay: 1s; }
+        .bat1 { top: 20%; right: 15%; animation-delay: 0.5s; font-size: 2.5em; }
+        .bat2 { bottom: 20%; left: 12%; animation-delay: 1.5s; font-size: 2.5em; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        /* Welcome Screen */
+        .welcome-container {
+            text-align: center;
+            padding: 30px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 30px;
+            border: 3px solid #ff8c00;
+            box-shadow: 0 0 40px rgba(255, 140, 0, 0.6);
+            max-width: 650px;
+        }
+
+        .halloween-icon {
+            font-size: 4em;
+            margin-bottom: 15px;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .logo {
+            font-size: 3em;
+            color: #ff8c00;
+            text-shadow: 0 0 20px rgba(255, 140, 0, 0.8);
+            margin-bottom: 8px;
+            letter-spacing: 2px;
+        }
+
+        .subtitle {
+            font-size: 1.8em;
+            color: #ffa500;
+            margin-bottom: 25px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+        }
+
+        .description {
+            color: #fff;
+            font-size: 1.1em;
+            margin-bottom: 30px;
+            line-height: 1.5;
+            font-family: Arial, sans-serif;
+        }
+
+        .start-btn {
+            background: linear-gradient(135deg, #ff8c00 0%, #ff6600 100%);
+            color: #000;
+            font-size: 1.8em;
+            font-weight: bold;
+            padding: 15px 50px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(255, 140, 0, 0.5);
+        }
+
+        .start-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 12px 35px rgba(255, 140, 0, 0.8);
+        }
+
+        /* Quiz Screen */
+        .quiz-container {
             width: 90%;
-            max-width: 1000px;
+            max-width: 950px;
             height: 85vh;
-            max-height: 700px;
+            max-height: 650px;
             perspective: 1000px;
             position: relative;
         }
@@ -35,8 +129,8 @@
             width: 100%;
             height: 100%;
             background: linear-gradient(180deg, #000 0%, #1a1a1a 100%);
-            border-radius: 30px;
-            box-shadow: 0 20px 60px rgba(255, 140, 0, 0.4);
+            border-radius: 25px;
+            box-shadow: 0 15px 50px rgba(255, 140, 0, 0.4);
             display: flex;
             flex-direction: column;
             opacity: 0;
@@ -59,41 +153,21 @@
 
         .question-area {
             background: #000;
-            padding: 25px 30px;
-            min-height: 140px;
-            max-height: 180px;
+            padding: 20px 25px;
+            min-height: 130px;
+            max-height: 150px;
             text-align: center;
             border-bottom: 3px solid #ff8c00;
-            animation: glow 2s ease-in-out infinite alternate;
             display: flex;
             flex-direction: column;
             justify-content: center;
         }
 
-        @keyframes glow {
-            from {
-                box-shadow: 0 0 20px rgba(255, 140, 0, 0.4);
-            }
-            to {
-                box-shadow: 0 0 40px rgba(255, 140, 0, 0.8);
-            }
-        }
-
         .question-number {
             color: #ff8c00;
-            font-size: 2em;
-            margin-bottom: 10px;
-            text-shadow: 0 0 20px rgba(255, 140, 0, 0.8);
-            animation: float 3s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-10px);
-            }
+            font-size: 1.6em;
+            margin-bottom: 8px;
+            text-shadow: 0 0 15px rgba(255, 140, 0, 0.8);
         }
 
         .question-text {
@@ -106,20 +180,19 @@
         .answers-area {
             flex: 1;
             background: linear-gradient(180deg, #ff8c00 0%, #ff6600 100%);
-            padding: 20px 30px;
+            padding: 20px 25px;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            gap: 12px;
-            overflow-y: auto;
+            gap: 10px;
         }
 
         .answer-option {
             background: rgba(0, 0, 0, 0.7);
-            padding: 15px 20px;
-            border-radius: 15px;
+            padding: 12px 18px;
+            border-radius: 12px;
             color: #fff;
-            font-size: 1.1em;
+            font-size: 1em;
             cursor: pointer;
             transition: all 0.3s ease;
             border: 2px solid transparent;
@@ -143,8 +216,7 @@
         .answer-option:hover {
             background: rgba(0, 0, 0, 0.9);
             border: 2px solid #fff;
-            transform: translateX(10px) scale(1.05);
-            box-shadow: 0 5px 20px rgba(255, 255, 255, 0.3);
+            transform: translateX(5px) scale(1.03);
         }
 
         .answer-option.correct {
@@ -154,92 +226,26 @@
             border: 2px solid #00ff00 !important;
             opacity: 1 !important;
             transform: translateX(0) !important;
-            animation: correctPulse 0.5s ease !important;
         }
 
         .answer-option.wrong {
-            background: #ff0000;
+            background: #ff0000 !important;
             animation: shake 0.5s ease;
-        }
-
-        @keyframes correctPulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
         }
 
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-10px); }
-            75% { transform: translateX(10px); }
+            25% { transform: translateX(-8px); }
+            75% { transform: translateX(8px); }
         }
-
-        .navigation {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 20px;
-            z-index: 100;
-        }
-
-        .nav-btn {
-            width: 55px;
-            height: 55px;
-            background: #ff8c00;
-            border: none;
-            border-radius: 50%;
-            color: #000;
-            font-size: 1.8em;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(255, 140, 0, 0.5);
-        }
-
-        .nav-btn:hover {
-            background: #ff6600;
-            transform: scale(1.2);
-            box-shadow: 0 8px 25px rgba(255, 140, 0, 0.8);
-        }
-
-        .nav-btn:active {
-            transform: scale(0.95);
-        }
-
-        .progress {
-            position: absolute;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: #ff8c00;
-            font-size: 1.2em;
-            z-index: 100;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 10px 20px;
-            border-radius: 20px;
-            border: 2px solid #ff8c00;
-        }
-
-        .decoration {
-            position: fixed;
-            font-size: 3em;
-            opacity: 0.3;
-            animation: float 4s ease-in-out infinite;
-            pointer-events: none;
-        }
-
-        .pumpkin1 { top: 10%; left: 5%; animation-delay: 0s; }
-        .pumpkin2 { top: 70%; right: 5%; animation-delay: 1s; }
-        .bat1 { top: 20%; right: 10%; animation-delay: 0.5s; }
-        .bat2 { bottom: 20%; left: 10%; animation-delay: 1.5s; }
 
         .show-answer-btn {
             background: rgba(255, 255, 255, 0.2);
             color: #fff;
             border: 2px solid #fff;
-            padding: 10px 20px;
-            font-size: 1em;
-            border-radius: 10px;
+            padding: 8px 18px;
+            font-size: 0.95em;
+            border-radius: 8px;
             cursor: pointer;
             margin-top: 5px;
             transition: all 0.3s ease;
@@ -247,36 +253,134 @@
 
         .show-answer-btn:hover {
             background: rgba(255, 255, 255, 0.4);
-            transform: scale(1.05);
+            transform: scale(1.03);
         }
 
-        .answer-reveal {
-            background: rgba(0, 255, 0, 0.2);
-            border: 2px solid #00ff00;
-            padding: 10px;
-            border-radius: 10px;
-            color: #fff;
+        .navigation {
+            position: absolute;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            z-index: 100;
+        }
+
+        .nav-btn {
+            width: 50px;
+            height: 50px;
+            background: #ff8c00;
+            border: none;
+            border-radius: 50%;
+            color: #000;
+            font-size: 1.6em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(255, 140, 0, 0.5);
+        }
+
+        .nav-btn:hover {
+            background: #ff6600;
+            transform: scale(1.15);
+        }
+
+        .progress {
+            position: absolute;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #ff8c00;
             font-size: 1.1em;
-            font-weight: bold;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 8px 18px;
+            border-radius: 15px;
+            border: 2px solid #ff8c00;
+        }
+
+        /* Thank You Screen */
+        .thankyou-container {
             text-align: center;
-            margin-top: 5px;
-            display: none;
-            animation: slideDown 0.5s ease;
+            padding: 40px 30px;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 30px;
+            border: 3px solid #ff8c00;
+            box-shadow: 0 0 50px rgba(255, 140, 0, 0.6);
+            max-width: 700px;
         }
 
-        .answer-reveal.show {
-            display: block;
+        .firework {
+            position: fixed;
+            font-size: 2.5em;
+            animation: explode 2s ease-out infinite;
+            pointer-events: none;
         }
 
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .firework1 { top: 15%; left: 20%; animation-delay: 0s; }
+        .firework2 { top: 25%; right: 20%; animation-delay: 0.5s; }
+        .firework3 { bottom: 20%; left: 25%; animation-delay: 1s; }
+        .firework4 { bottom: 25%; right: 18%; animation-delay: 1.5s; }
+
+        @keyframes explode {
+            0% { transform: scale(0); opacity: 0; }
+            50% { transform: scale(1.3); opacity: 1; }
+            100% { transform: scale(0); opacity: 0; }
+        }
+
+        .celebrate-icon {
+            font-size: 5em;
+            margin-bottom: 20px;
+            animation: celebrate 1.5s ease-in-out infinite;
+        }
+
+        @keyframes celebrate {
+            0%, 100% { transform: rotate(-8deg); }
+            50% { transform: rotate(8deg); }
+        }
+
+        .thankyou-title {
+            font-size: 3.5em;
+            color: #ff8c00;
+            text-shadow: 0 0 25px rgba(255, 140, 0, 0.8);
+            margin-bottom: 15px;
+        }
+
+        .thankyou-message {
+            color: #ffa500;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+        }
+
+        .thankyou-sub {
+            color: #fff;
+            font-size: 1.2em;
+            margin-bottom: 35px;
+            font-family: Arial, sans-serif;
+            line-height: 1.5;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #ff8c00 0%, #ff6600 100%);
+            color: #000;
+            font-size: 1.3em;
+            font-weight: bold;
+            padding: 12px 35px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(255, 140, 0, 0.5);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 12px 35px rgba(255, 140, 0, 0.8);
         }
     </style>
 </head>
@@ -286,165 +390,207 @@
     <div class="decoration bat1">🦇</div>
     <div class="decoration bat2">🦇</div>
 
-    <div class="progress">
-        <span id="current">1</span> / <span id="total">10</span>
-    </div>
-
-    <div class="container">
-        <!-- Slide 1 -->
-        <div class="slide active">
-            <div class="question-area">
-                <div class="question-number">1</div>
-                <div class="question-text">What day is Halloween celebrated on?</div>
-            </div>
-            <div class="answers-area">
-                <div class="answer-option" data-correct="false">1. November 1st</div>
-                <div class="answer-option" data-correct="false">2. October 30th</div>
-                <div class="answer-option" data-correct="true">3. October 31st</div>
-                <div class="answer-option" data-correct="false">4. August 31st</div>
-                <button class="show-answer-btn">Show Answer</button>
-            </div>
-        </div>
-
-        <!-- Slide 2 -->
-        <div class="slide">
-            <div class="question-area">
-                <div class="question-number">2</div>
-                <div class="question-text">In which country did Halloween originate?</div>
-            </div>
-            <div class="answers-area">
-                <div class="answer-option" data-correct="false">1. The U.S.</div>
-                <div class="answer-option" data-correct="false">2. England</div>
-                <div class="answer-option" data-correct="false">3. Spain</div>
-                <div class="answer-option" data-correct="true">4. Ireland</div>
-                <button class="show-answer-btn">Show Answer</button>
-            </div>
-        </div>
-
-        <!-- Slide 3 -->
-        <div class="slide">
-            <div class="question-area">
-                <div class="question-number">3</div>
-                <div class="question-text">What is the true origin of Halloween?</div>
-            </div>
-            <div class="answers-area">
-                <div class="answer-option" data-correct="true">1. Celtic</div>
-                <div class="answer-option" data-correct="false">2. Viking</div>
-                <div class="answer-option" data-correct="false">3. Greek</div>
-                <div class="answer-option" data-correct="false">4. Rome</div>
-                <button class="show-answer-btn">Show Answer</button>
-            </div>
-        </div>
-
-        <!-- Slide 4 -->
-        <div class="slide">
-            <div class="question-area">
-                <div class="question-number">4</div>
-                <div class="question-text">A hollowed pumpkin with a face cut in one side and a candle put inside.</div>
-            </div>
-            <div class="answers-area">
-                <div class="answer-option" data-correct="false">1. A ghost</div>
-                <div class="answer-option" data-correct="true">2. Jack-o'-lantern</div>
-                <div class="answer-option" data-correct="false">3. Trick or treat</div>
-                <div class="answer-option" data-correct="false">4. Haunted house</div>
-                <button class="show-answer-btn">Show Answer</button>
-            </div>
-        </div>
-
-        <!-- Slide 5 -->
-        <div class="slide">
-            <div class="question-area">
-                <div class="question-number">5</div>
-                <div class="question-text">What were the first Jack-o'-lantern made?</div>
-            </div>
-            <div class="answers-area">
-                <div class="answer-option" data-correct="false">1. Pumpkins</div>
-                <div class="answer-option" data-correct="true">2. Turnips</div>
-                <div class="answer-option" data-correct="false">3. Watermelons</div>
-                <div class="answer-option" data-correct="false">4. Potatoes</div>
-                <button class="show-answer-btn">Show Answer</button>
-            </div>
-        </div>
-
-        <!-- Slide 6 -->
-        <div class="slide">
-            <div class="question-area">
-                <div class="question-number">6</div>
-                <div class="question-text">What was the original name of Halloween?</div>
-            </div>
-            <div class="answers-area">
-                <div class="answer-option" data-correct="false">1. All Hallow's Eve</div>
-                <div class="answer-option" data-correct="false">2. All Hallow's Day</div>
-                <div class="answer-option" data-correct="true">3. All Saint's Eve</div>
-                <div class="answer-option" data-correct="false">4. All Saint's Day</div>
-                <button class="show-answer-btn">Show Answer</button>
-            </div>
-        </div>
-
-        <!-- Slide 7 -->
-        <div class="slide">
-            <div class="question-area">
-                <div class="question-number">7</div>
-                <div class="question-text">What do kids say to get candy on Halloween?</div>
-            </div>
-            <div class="answers-area">
-                <div class="answer-option" data-correct="false">1. Candy or apple!</div>
-                <div class="answer-option" data-correct="false">2. Trick or candy!</div>
-                <div class="answer-option" data-correct="false">3. Sweet or sour!</div>
-                <div class="answer-option" data-correct="true">4. Trick or treat!</div>
-                <button class="show-answer-btn">Show Answer</button>
-            </div>
-        </div>
-
-        <!-- Slide 8 -->
-        <div class="slide">
-            <div class="question-area">
-                <div class="question-number">8</div>
-                <div class="question-text">It has sharp teeth and likes to drink blood. It can't come out at daylight.</div>
-            </div>
-            <div class="answers-area">
-                <div class="answer-option" data-correct="false">1. A ghost</div>
-                <div class="answer-option" data-correct="false">2. A mummy</div>
-                <div class="answer-option" data-correct="true">3. A vampire</div>
-                <div class="answer-option" data-correct="false">4. A witch</div>
-                <button class="show-answer-btn">Show Answer</button>
-            </div>
-        </div>
-
-        <!-- Slide 9 -->
-        <div class="slide">
-            <div class="question-area">
-                <div class="question-number">9</div>
-                <div class="question-text">A woman who has evil magical powers?</div>
-            </div>
-            <div class="answers-area">
-                <div class="answer-option" data-correct="false">1. A mummy</div>
-                <div class="answer-option" data-correct="false">2. A monster</div>
-                <div class="answer-option" data-correct="true">3. A witch</div>
-                <div class="answer-option" data-correct="false">4. A ghost</div>
-                <button class="show-answer-btn">Show Answer</button>
-            </div>
-        </div>
-
-        <!-- Slide 10 -->
-        <div class="slide">
-            <div class="question-area">
-                <div class="question-number">10</div>
-                <div class="question-text">The frame of bones that supports the human body.</div>
-            </div>
-            <div class="answers-area">
-                <div class="answer-option" data-correct="false">1. A zombie</div>
-                <div class="answer-option" data-correct="true">2. A skeleton</div>
-                <div class="answer-option" data-correct="false">3. A ghost</div>
-                <div class="answer-option" data-correct="false">4. A mummy</div>
-                <button class="show-answer-btn">Show Answer</button>
-            </div>
+    <!-- Welcome Screen -->
+    <div class="screen active" id="welcomeScreen">
+        <div class="welcome-container">
+            <div class="halloween-icon">🎃👻🦇</div>
+            <h1 class="logo">ZENITH ENGLISH</h1>
+            <h2 class="subtitle">Halloween Quiz</h2>
+            <p class="description">
+                Test your knowledge about Halloween!<br>
+                10 spooky questions await you...<br>
+                Are you ready for the challenge?
+            </p>
+            <button class="start-btn" onclick="startQuiz()">START QUIZ</button>
         </div>
     </div>
 
-    <div class="navigation">
-        <button class="nav-btn" id="prevBtn">◀</button>
-        <button class="nav-btn" id="nextBtn">▶</button>
+    <!-- Quiz Screen -->
+    <div class="screen" id="quizScreen">
+        <div class="progress">
+            <span id="current">1</span> / <span id="total">10</span>
+        </div>
+
+        <div class="quiz-container">
+            <!-- Slide 1 -->
+            <div class="slide active">
+                <div class="question-area">
+                    <div class="question-number">1</div>
+                    <div class="question-text">What day is Halloween celebrated on?</div>
+                </div>
+                <div class="answers-area">
+                    <div class="answer-option" data-correct="false">1. November 1st</div>
+                    <div class="answer-option" data-correct="false">2. October 30th</div>
+                    <div class="answer-option" data-correct="true">3. October 31st</div>
+                    <div class="answer-option" data-correct="false">4. August 31st</div>
+                    <button class="show-answer-btn">Show Answer</button>
+                </div>
+            </div>
+
+            <!-- Slide 2 -->
+            <div class="slide">
+                <div class="question-area">
+                    <div class="question-number">2</div>
+                    <div class="question-text">In which country did Halloween originate?</div>
+                </div>
+                <div class="answers-area">
+                    <div class="answer-option" data-correct="false">1. The U.S.</div>
+                    <div class="answer-option" data-correct="false">2. England</div>
+                    <div class="answer-option" data-correct="false">3. Spain</div>
+                    <div class="answer-option" data-correct="true">4. Ireland</div>
+                    <button class="show-answer-btn">Show Answer</button>
+                </div>
+            </div>
+
+            <!-- Slide 3 -->
+            <div class="slide">
+                <div class="question-area">
+                    <div class="question-number">3</div>
+                    <div class="question-text">What is the true origin of Halloween?</div>
+                </div>
+                <div class="answers-area">
+                    <div class="answer-option" data-correct="true">1. Celtic</div>
+                    <div class="answer-option" data-correct="false">2. Viking</div>
+                    <div class="answer-option" data-correct="false">3. Greek</div>
+                    <div class="answer-option" data-correct="false">4. Rome</div>
+                    <button class="show-answer-btn">Show Answer</button>
+                </div>
+            </div>
+
+            <!-- Slide 4 -->
+            <div class="slide">
+                <div class="question-area">
+                    <div class="question-number">4</div>
+                    <div class="question-text">A hollowed pumpkin with a face cut in one side and a candle put inside.</div>
+                </div>
+                <div class="answers-area">
+                    <div class="answer-option" data-correct="false">1. A ghost</div>
+                    <div class="answer-option" data-correct="true">2. Jack-o'-lantern</div>
+                    <div class="answer-option" data-correct="false">3. Trick or treat</div>
+                    <div class="answer-option" data-correct="false">4. Haunted house</div>
+                    <button class="show-answer-btn">Show Answer</button>
+                </div>
+            </div>
+
+            <!-- Slide 5 -->
+            <div class="slide">
+                <div class="question-area">
+                    <div class="question-number">5</div>
+                    <div class="question-text">What were the first Jack-o'-lantern made?</div>
+                </div>
+                <div class="answers-area">
+                    <div class="answer-option" data-correct="false">1. Pumpkins</div>
+                    <div class="answer-option" data-correct="true">2. Turnips</div>
+                    <div class="answer-option" data-correct="false">3. Watermelons</div>
+                    <div class="answer-option" data-correct="false">4. Potatoes</div>
+                    <button class="show-answer-btn">Show Answer</button>
+                </div>
+            </div>
+
+            <!-- Slide 6 -->
+            <div class="slide">
+                <div class="question-area">
+                    <div class="question-number">6</div>
+                    <div class="question-text">What was the original name of Halloween?</div>
+                </div>
+                <div class="answers-area">
+                    <div class="answer-option" data-correct="false">1. All Hallow's Eve</div>
+                    <div class="answer-option" data-correct="false">2. All Hallow's Day</div>
+                    <div class="answer-option" data-correct="true">3. All Saint's Eve</div>
+                    <div class="answer-option" data-correct="false">4. All Saint's Day</div>
+                    <button class="show-answer-btn">Show Answer</button>
+                </div>
+            </div>
+
+            <!-- Slide 7 -->
+            <div class="slide">
+                <div class="question-area">
+                    <div class="question-number">7</div>
+                    <div class="question-text">What do kids say to get candy on Halloween?</div>
+                </div>
+                <div class="answers-area">
+                    <div class="answer-option" data-correct="false">1. Candy or apple!</div>
+                    <div class="answer-option" data-correct="false">2. Trick or candy!</div>
+                    <div class="answer-option" data-correct="false">3. Sweet or sour!</div>
+                    <div class="answer-option" data-correct="true">4. Trick or treat!</div>
+                    <button class="show-answer-btn">Show Answer</button>
+                </div>
+            </div>
+
+            <!-- Slide 8 -->
+            <div class="slide">
+                <div class="question-area">
+                    <div class="question-number">8</div>
+                    <div class="question-text">It has sharp teeth and likes to drink blood. It can't come out at daylight.</div>
+                </div>
+                <div class="answers-area">
+                    <div class="answer-option" data-correct="false">1. A ghost</div>
+                    <div class="answer-option" data-correct="false">2. A mummy</div>
+                    <div class="answer-option" data-correct="true">3. A vampire</div>
+                    <div class="answer-option" data-correct="false">4. A witch</div>
+                    <button class="show-answer-btn">Show Answer</button>
+                </div>
+            </div>
+
+            <!-- Slide 9 -->
+            <div class="slide">
+                <div class="question-area">
+                    <div class="question-number">9</div>
+                    <div class="question-text">A woman who has evil magical powers?</div>
+                </div>
+                <div class="answers-area">
+                    <div class="answer-option" data-correct="false">1. A mummy</div>
+                    <div class="answer-option" data-correct="false">2. A monster</div>
+                    <div class="answer-option" data-correct="true">3. A witch</div>
+                    <div class="answer-option" data-correct="false">4. A ghost</div>
+                    <button class="show-answer-btn">Show Answer</button>
+                </div>
+            </div>
+
+            <!-- Slide 10 -->
+            <div class="slide">
+                <div class="question-area">
+                    <div class="question-number">10</div>
+                    <div class="question-text">The frame of bones that supports the human body.</div>
+                </div>
+                <div class="answers-area">
+                    <div class="answer-option" data-correct="false">1. A zombie</div>
+                    <div class="answer-option" data-correct="true">2. A skeleton</div>
+                    <div class="answer-option" data-correct="false">3. A ghost</div>
+                    <div class="answer-option" data-correct="false">4. A mummy</div>
+                    <button class="show-answer-btn">Show Answer</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="navigation">
+            <button class="nav-btn" id="prevBtn">◀</button>
+            <button class="nav-btn" id="nextBtn">▶</button>
+        </div>
+    </div>
+
+    <!-- Thank You Screen -->
+    <div class="screen" id="thankyouScreen">
+        <div class="firework firework1">✨</div>
+        <div class="firework firework2">🎆</div>
+        <div class="firework firework3">✨</div>
+        <div class="firework firework4">🎆</div>
+
+        <div class="thankyou-container">
+            <div class="celebrate-icon">🎃👻🦇</div>
+            <h1 class="thankyou-title">THANK YOU!</h1>
+            <p class="thankyou-message">You've completed the Halloween Quiz!</p>
+            <p class="thankyou-sub">
+                Great job on testing your Halloween knowledge!<br>
+                We hope you had a spooktacular time!<br>
+                Happy Halloween! 🎃
+            </p>
+            
+            <div class="buttons">
+                <button class="btn" onclick="restartQuiz()">TRY AGAIN</button>
+                <button class="btn" onclick="goHome()">HOME</button>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -455,6 +601,92 @@
         const totalSpan = document.getElementById('total');
         
         totalSpan.textContent = totalSlides;
+
+        function startQuiz() {
+            document.getElementById('welcomeScreen').classList.remove('active');
+            document.getElementById('quizScreen').classList.add('active');
+        }
+
+        function showThankYou() {
+            document.getElementById('quizScreen').classList.remove('active');
+            document.getElementById('thankyouScreen').classList.add('active');
+        }
+
+        function restartQuiz() {
+            // Reset to first slide
+            slides[currentSlide].classList.remove('active');
+            slides[currentSlide].classList.add('prev');
+            
+            currentSlide = 0;
+            
+            // Reset all slides
+            slides.forEach((slide, index) => {
+                slide.classList.remove('active', 'prev');
+                if (index === 0) {
+                    slide.classList.add('active');
+                }
+            });
+            
+            currentSpan.textContent = 1;
+            
+            // Reset next button
+            const nextBtn = document.getElementById('nextBtn');
+            nextBtn.textContent = '▶';
+            nextBtn.style.fontSize = '1.6em';
+            
+            // Reset all answer options
+            document.querySelectorAll('.answer-option').forEach(opt => {
+                opt.classList.remove('correct', 'wrong');
+                opt.style.animation = '';
+                opt.style.backgroundColor = '';
+                opt.style.color = '';
+                opt.style.fontWeight = '';
+                opt.style.border = '';
+                opt.style.opacity = '';
+                opt.style.transform = '';
+            });
+            
+            document.getElementById('thankyouScreen').classList.remove('active');
+            document.getElementById('quizScreen').classList.add('active');
+        }
+
+        function goHome() {
+            // Reset to first slide
+            slides[currentSlide].classList.remove('active');
+            slides[currentSlide].classList.add('prev');
+            
+            currentSlide = 0;
+            
+            // Reset all slides
+            slides.forEach((slide, index) => {
+                slide.classList.remove('active', 'prev');
+                if (index === 0) {
+                    slide.classList.add('active');
+                }
+            });
+            
+            currentSpan.textContent = 1;
+            
+            // Reset next button
+            const nextBtn = document.getElementById('nextBtn');
+            nextBtn.textContent = '▶';
+            nextBtn.style.fontSize = '1.6em';
+            
+            // Reset all answer options
+            document.querySelectorAll('.answer-option').forEach(opt => {
+                opt.classList.remove('correct', 'wrong');
+                opt.style.animation = '';
+                opt.style.backgroundColor = '';
+                opt.style.color = '';
+                opt.style.fontWeight = '';
+                opt.style.border = '';
+                opt.style.opacity = '';
+                opt.style.transform = '';
+            });
+            
+            document.getElementById('thankyouScreen').classList.remove('active');
+            document.getElementById('welcomeScreen').classList.add('active');
+        }
 
         function updateSlide(newIndex) {
             slides[currentSlide].classList.remove('active');
@@ -477,11 +709,23 @@
                     option.style.animation = '';
                 }, 10);
             });
+
+            // Change next button on last slide
+            const nextBtn = document.getElementById('nextBtn');
+            if (currentSlide === totalSlides - 1) {
+                nextBtn.textContent = '✓';
+                nextBtn.style.fontSize = '2em';
+            } else {
+                nextBtn.textContent = '▶';
+                nextBtn.style.fontSize = '1.6em';
+            }
         }
 
         document.getElementById('nextBtn').addEventListener('click', () => {
             if (currentSlide < totalSlides - 1) {
                 updateSlide(currentSlide + 1);
+            } else {
+                showThankYou();
             }
         });
 
@@ -493,10 +737,12 @@
 
         // Keyboard navigation
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowRight' && currentSlide < totalSlides - 1) {
-                updateSlide(currentSlide + 1);
-            } else if (e.key === 'ArrowLeft' && currentSlide > 0) {
-                updateSlide(currentSlide - 1);
+            if (document.getElementById('quizScreen').classList.contains('active')) {
+                if (e.key === 'ArrowRight' && currentSlide < totalSlides - 1) {
+                    updateSlide(currentSlide + 1);
+                } else if (e.key === 'ArrowLeft' && currentSlide > 0) {
+                    updateSlide(currentSlide - 1);
+                }
             }
         });
 
@@ -535,18 +781,15 @@
                 const allOptions = answersArea.querySelectorAll('.answer-option');
                 
                 allOptions.forEach(opt => {
-                    // Remove animation that might cause disappearing
                     opt.style.animation = 'none';
                     
                     if (opt.getAttribute('data-correct') === 'true') {
-                        // Force styles directly
                         opt.style.backgroundColor = 'rgba(0, 0, 0, 0.9)';
                         opt.style.color = '#00ff00';
                         opt.style.fontWeight = 'bold';
                         opt.style.border = '2px solid #00ff00';
                         opt.style.opacity = '1';
                         opt.style.transform = 'translateX(0)';
-                        opt.style.display = 'block';
                         opt.classList.add('correct');
                     }
                 });
